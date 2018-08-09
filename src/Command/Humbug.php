@@ -90,6 +90,10 @@ class Humbug extends Command
             $renderer = new Text($output);
         }
 
+        if($input->getOption('teamcity')) {
+            $renderer->enableTeamcity();
+        }
+
         /**
          * Make initial test run to ensure tests are in a starting passing state
          * and also log the results so test runs during the mutation phase can
@@ -262,6 +266,12 @@ class Humbug extends Command
                null,
                InputOption::VALUE_REQUIRED,
                'Generate log file in text format.'
+            )
+            ->addOption(
+                'teamcity',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Log teamcity service messages'
             )
         ;
     }

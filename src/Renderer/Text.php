@@ -29,6 +29,8 @@ class Text
 
     protected $useBuffer = false;
 
+    protected $renderTeamcityMessages = false;
+
     public function __construct(OutputInterface $output, $buffer = false, $colors = true)
     {
         $this->output = $output;
@@ -58,6 +60,11 @@ class Text
         $return = $this->buffer;
         $this->buffer = '';
         return $return;
+    }
+
+    public function enableTeamcity()
+    {
+        $this->renderTeamcityMessages = true;
     }
 
     /**
@@ -255,6 +262,12 @@ class Text
         $this->write('    Covered Code MSI: <options=bold>' . $detectionRateTested . '%</options=bold>');
         $this->write(PHP_EOL, false);
         $this->write('Remember that some mutants will inevitably be harmless (i.e. false positives).');
+
+        if($this->renderTeamcityMessages) {
+            $this->write("##teamcity[buildStatisticValue key='humbug.mutation-score-indicator' value='$detectionRateAll']");
+            $this->write("##teamcity[buildStatisticValue key='humbug.mutation-code-coverage' value='$coveredRate']");
+            $this->write("##teamcity[buildStatisticValue key='humbug.covered-code-msi' value='$detectionRateTested']");
+        }
     }
 
     /**
